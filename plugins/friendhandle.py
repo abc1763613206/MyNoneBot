@@ -3,7 +3,7 @@ from nonebot import on_request, RequestSession
 @on_request('friend')
 async def _(session: RequestSession):
     # 判断验证信息是否符合要求
-    if 'bot' in session.ctx['comment']:
+    if session.bot.config.APPROVE_MSG in session.ctx['comment']:
         # 验证信息正确，同意入群
         await session.approve()
         return
