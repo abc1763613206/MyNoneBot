@@ -56,6 +56,7 @@ async def call_txchat_api(session: CommandSession, text: str) -> Optional[str]:
                 try:
                     data =  json.loads(await response.text())
                     if data['ret'] == 0:
+                        print('Answer: '+data['data']['answer']+'\n')
                         return data['data']['answer']
                     else:
                         return None
