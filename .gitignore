@@ -126,3 +126,4 @@ dmypy.json
 
 # Config For NoneBot
 config.py
+config.ini
