@@ -1,6 +1,6 @@
 # 参照 https://ai.qq.com/doc/sdk.shtml
 from .apiutil import *
-import apiutil
+#import apiutil
 
 app_id = session.bot.config.TX_CHAT_APPID
 app_key = session.bot.config.TX_CHAT_APPKEY
