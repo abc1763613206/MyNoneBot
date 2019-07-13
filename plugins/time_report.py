@@ -17,7 +17,7 @@ async def _():
         webresult = requests.get('https://api.ihcr.top/hitokoto/', timeout=1)
         data = json.loads(webresult.text)
         msg = msg + '\n--------------\n本小时的一言(Hitokoto):\n'+data['content']+'\n'+data['translation']+'\n—— '+data['origin']['singer']+' 《'+data['origin']['title']+'》\n'
-        for gid in bot.config.MANGROUP
+        for gid in bot.config.MANGROUP:
             await bot.send_group_msg(group_id=gid,
                                  message=msg)
     except CQHttpError:
