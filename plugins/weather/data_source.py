@@ -22,7 +22,7 @@ async def get_weather_of_city(city: str) -> str:
     output = str(output+'\n-------------\n今天及未来几天的天气预报:\n\n')
     for ind in WData:
         output = str(output+ind['date']+': \n'+ind['weather']+' '+ind['wind']+' 气温'+ind['temperature']+'\n\n')
-    output = str(output+'\n-------------\nSource: 百度天气(姬长信API）\n')
+    output = str(output+'\n-------------\nSource: 百度天气(姬长信API)\n')
 
     return output
     # 这里简单返回一个字符串
