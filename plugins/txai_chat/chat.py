@@ -17,5 +17,5 @@ async def call_txchat_api(session: CommandSession, text: str) -> Optional[str]:
     if rsp['ret'] == 0:
         return json.dumps(rsp, encoding="UTF-8", ensure_ascii=False, sort_keys=False, indent=4)
     else:
-        print json.dumps(rsp, encoding="UTF-8", ensure_ascii=False, sort_keys=False, indent=4)
+        print (json.dumps(rsp, encoding="UTF-8", ensure_ascii=False, sort_keys=False, indent=4))
         return None
