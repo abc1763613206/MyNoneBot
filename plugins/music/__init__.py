@@ -21,8 +21,8 @@ async def search_song_id(keyword: str) -> Optional[int]:
     keyword = keyword.strip()
     if not keyword:
         return None
-    resp = await requests.get(QQ_MUSIC_SEARCH_URL_FORMAT.format(keyword))
-    payload = await json.loads(await resp.text())
+    resp = requests.get(QQ_MUSIC_SEARCH_URL_FORMAT.format(keyword))
+    payload = json.loads(resp.text())
     if not isinstance(payload, dict) or \
             payload.get('code') != 0 or \
             not payload.get('data'):
