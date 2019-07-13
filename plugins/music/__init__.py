@@ -9,6 +9,8 @@ from nonebot import on_command, CommandSession
 from nonebot import on_natural_language, NLPSession, IntentCommand
 from nonebot.command.argfilter import extractors, validators
 
+import json
+import requests
 
 
 QQ_MUSIC_SEARCH_URL_FORMAT = 'https://c.y.qq.com/soso/fcgi-bin/client_search_cp?g_tk=5381&p=1&n=20&w={}&format=json&loginUin=0&hostUin=0&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&remoteplace=txt.yqq.song&t=0&aggr=1&cr=1&catZhida=1&flag_qc=0'
@@ -20,7 +22,7 @@ async def search_song_id(keyword: str) -> Optional[int]:
     if not keyword:
         return None
     resp = await requests.get(QQ_MUSIC_SEARCH_URL_FORMAT.format(keyword))
-    payload = await resp.json()
+    payload = await json.loads(await resp.text())
     if not isinstance(payload, dict) or \
             payload.get('code') != 0 or \
             not payload.get('data'):
