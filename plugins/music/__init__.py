@@ -12,6 +12,12 @@ from nonebot.command.argfilter import extractors, validators
 import json
 import requests
 
+__plugin_name__ = '点歌姬'
+__plugin_usage__ = r"""
+点歌姬(QQ 音乐)
+
+用法：点歌 [音乐名]
+"""
 
 QQ_MUSIC_SEARCH_URL_FORMAT = 'https://c.y.qq.com/soso/fcgi-bin/client_search_cp?g_tk=5381&p=1&n=20&w={}&format=json&loginUin=0&hostUin=0&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&remoteplace=txt.yqq.song&t=0&aggr=1&cr=1&catZhida=1&flag_qc=0'
 
@@ -57,7 +63,7 @@ async def _(session: CommandSession):
         return
 
 
-CALLING_KEYWORDS = {'来一首', '点一首', '整一首', '播放', '点歌'}
+CALLING_KEYWORDS = {'来一首', '点一首', '整一首', '播放', '点歌','来首','点首'}
 
 
 @on_natural_language(keywords=CALLING_KEYWORDS)

@@ -5,6 +5,14 @@ from jieba import posseg
 
 from .data_source import get_weather_of_city
 
+__plugin_name__ = '天气'
+__plugin_usage__ = r"""
+天气查询(百度天气-姬长信API)
+
+用法：天气  [城市名称]
+"""
+
+
 # on_command 装饰器将函数声明为一个命令处理器
 # 这里 weather 为命令的名字，同时允许使用别名「天气」「天气预报」「查天气」
 @on_command('weather', aliases=('天气', '天气预报', '查天气','weather'))

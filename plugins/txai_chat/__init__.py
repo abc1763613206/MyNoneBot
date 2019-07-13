@@ -10,6 +10,12 @@ from nonebot.helpers import context_id, render_expression
 
 from .chat import call_txchat_api
 
+__plugin_name__ = '智能聊天'
+__plugin_usage__ = r"""
+智能聊天(腾讯 AI)
+
+用法：直接向我聊天即可~
+"""
 # 定义无法获取图灵回复时的「表达（Expression）」
 EXPR_DONT_UNDERSTAND = (
     '我现在还不太明白你在说什么呢，但没关系，以后的我会变得更强呢！',
