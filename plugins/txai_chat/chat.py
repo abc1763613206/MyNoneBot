@@ -6,6 +6,10 @@ from random import randint
 import json
 import aiohttp
 from aiocqhttp.message import escape
+from nonebot import on_command, CommandSession
+from nonebot import on_natural_language, NLPSession, IntentCommand
+from nonebot.helpers import context_id, render_expression
+from typing import Optional
 
 # https://github.com/amongtheflowers/gadgetBot/blob/master/gadget/untils/chat_txai.py
 # 
@@ -16,15 +20,15 @@ def get_nonce_str():
     nonce_str_example = 'fa577ce340859f9fe'
     nonce_str = ''
     len_str = string.digits + string.ascii_letters
-    for i in range(len(self.nonce_str_example)):
+    for i in range(len(nonce_str_example)):
         nonce_str += len_str[randint(0, len(len_str) - 1)]
     return nonce_str
 
 
-def sign(req_data):
+def sign(req_data,app_key):
     new_list = sorted(req_data.items())
     encode_list = urlencode(new_list)
-    req_data = encode_list + "&" + "app_key" + "=" + self.app_key
+    req_data = encode_list + "&" + "app_key" + "=" + app_key
     md5 = hashlib.md5()
     md5.update(req_data.encode('utf-8'))
     data = md5.hexdigest()
@@ -35,17 +39,16 @@ async def call_txchat_api(session: CommandSession, text: str) -> Optional[str]:
     app_id = session.bot.config.TX_CHAT_APPID
     app_key = session.bot.config.TX_CHAT_APPKEY
     api_url = 'https://api.ai.qq.com/fcgi-bin/nlp/nlp_textchat'
-    ct = lambda: time.time()
     
     req_data = {
             'app_id': app_id,
-            'time_stamp': int(self.ct()),
+            'time_stamp': int(time.time()),
             'nonce_str': get_nonce_str(),
-            'session': urlencode(context_id(session.ctx, use_hash=True)),
+            'session': context_id(session.ctx, use_hash=True),
             'question': text,
     }
-    
-    req_data['sign'] = sign(req_data)
+    print('Now Session: '+context_id(session.ctx, use_hash=True)+'\n')
+    req_data['sign'] = sign(req_data,app_key)
     req_data = sorted(req_data.items())
     try:
         async with aiohttp.ClientSession() as sess:
