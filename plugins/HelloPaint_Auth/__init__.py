@@ -1,5 +1,6 @@
 import asyncio
 import json
+import nonebot
 from nonebot import MessageSegment
 from nonebot import on_command, CommandSession
 
