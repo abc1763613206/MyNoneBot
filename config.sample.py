@@ -20,3 +20,5 @@ TX_CHAT_APPKEY = ''
 # 默认设置为带有如下字段就通过
 APPROVE_MSG = 'bot'
 
+# HelloPaint Auth
+TOKEN = ''
