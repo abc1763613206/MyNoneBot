@@ -14,9 +14,10 @@ bot = nonebot.get_bot()
 
 @bot.server_app.route("/paintboard/send_code", methods=["POST","GET"])
 async def paintboard_send_code():
-    token = request.form["token"]
-    target = request.form["target"]
-    content = request.form["content"]
+	form = await request.form
+    token = form["token"]
+    target = form["target"]
+    content = form["content"]
     if token != bot.config.TOKEN:
         return make_response(False, {"message": "token错误"})
     try:
