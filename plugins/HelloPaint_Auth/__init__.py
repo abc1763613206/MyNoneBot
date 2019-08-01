@@ -14,7 +14,7 @@ bot = nonebot.get_bot()
 
 @bot.server_app.route("/paintboard/send_code", methods=["POST","GET"])
 async def paintboard_send_code():
-	form = await request.form
+    form = await request.form
     token = form["token"]
     target = form["target"]
     content = form["content"]
