@@ -13,12 +13,14 @@ bot = nonebot.get_bot()
 
 
 @bot.server_app.route("/paintboard/send_code", methods=["POST","GET"])
-def paintboard_send_code():
-    token, target, content = request.form["token"], request.form["target"], request.form["content"]
+async def paintboard_send_code():
+    token = request.form["token"]
+    target = request.form["target"]
+    content = request.form["content"]
     if token != bot.config.TOKEN:
         return make_response(False, {"message": "token错误"})
     try:
-        bot.send_private_msg(user_id=target, message=content)
+        await bot.send_private_msg(user_id=target, message=content)
     except CQHttpError:
         pass
     return make_response(True)
