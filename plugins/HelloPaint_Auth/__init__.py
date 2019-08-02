@@ -4,6 +4,7 @@ import nonebot
 from quart import request
 from nonebot import MessageSegment
 from nonebot import on_command, CommandSession
+from aiocqhttp.exceptions import Error as CQHttpError
 
 def make_response(ok, result):
     from json import JSONEncoder
