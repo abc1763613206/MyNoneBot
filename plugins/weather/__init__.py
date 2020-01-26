@@ -12,7 +12,7 @@ __plugin_usage__ = r"""
 用法：天气  [城市名称]
 """
 
-
+bot = nonebot.get_bot()
 # on_command 装饰器将函数声明为一个命令处理器
 # 这里 weather 为命令的名字，同时允许使用别名「天气」「天气预报」「查天气」
 @on_command('weather', aliases=('天气', '天气预报', '查天气','weather'))
@@ -22,7 +22,7 @@ async def weather(session: CommandSession):
     # 获取城市的天气预报
     weather_report = await get_weather_of_city(city)
     # 向用户发送天气预报
-    await session.send(weather_report)
+    await bot.send_private_msg(user_id=session.ctx['user_id'], message=weather_report)
 
 
 # weather.args_parser 装饰器将函数声明为 weather 命令的参数解析器
