@@ -13,7 +13,7 @@ def make_response(ok, result):
 bot = nonebot.get_bot()
 
 
-@bot.server_app.route("/paintboard/send_code", methods=["POST"])
+@bot.server_app.route("/send_code", methods=["POST"])
 async def paintboard_send_code():
     form = await request.form
     token = form.get("token")
