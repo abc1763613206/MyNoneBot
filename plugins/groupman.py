@@ -21,7 +21,7 @@ async def _(session: RequestSession):
             return
         # 验证信息错误，拒绝入群
         await session.reject('请说出暗号！')
-    else if session.ctx['sub_type'] == 'invite': # 邀请入群
+    elif session.ctx['sub_type'] == 'invite': # 邀请入群
         if session.ctx['user_id'] in session.bot.config.SUPERUSERS:
             # 验证信息正确，同意入群
             await session.approve()
