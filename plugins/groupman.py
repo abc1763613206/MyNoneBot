@@ -13,7 +13,7 @@ bot = nonebot.get_bot()
 # 群成员入群/邀请登录号入群
 @on_request('group')
 async def _(session: RequestSession):
-	if session.ctx['sub_type'] == 'add': # 加群请求
+    if session.ctx['sub_type'] == 'add': # 加群请求
         # 判断验证信息是否符合要求
         if session.bot.config.APPROVE_MSG in session.ctx['comment']:
             # 验证信息正确，同意入群
