@@ -11,6 +11,7 @@ from nonebot.command.argfilter import extractors, validators
 
 import json
 import requests
+import traceback
 
 __plugin_name__ = '新型冠状病毒（SARS-CoV-2）数据'
 __plugin_usage__ = r"""
@@ -26,7 +27,7 @@ async def get_nCov_data(keyword: str) -> Optional[int]:
     ret = "API 请求失败，请检查您的输入是否规范！"
     if not keyword or keyword == '全部':
         api_overall = "https://lab.isaaclin.cn/nCoV/api/overall"
-        resp = requests.get(api_area.format(keyword))
+        resp = requests.get(api_overall)
         payload = json.loads(resp.text)
         try:
             nowt = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(int(payload['results']['updateTime'])/1000))
@@ -34,10 +35,11 @@ async def get_nCov_data(keyword: str) -> Optional[int]:
             ret = "新型冠状病毒（SARS-CoV-2）数据汇总(丁香园)：\n截至 {} \n累计确诊：{}（较昨日+{}）\n疑似：{}（较昨日+{}）\n重症：{}（较昨日+{}）\n死亡：{}（较昨日+{}）\n治愈：{}（较昨日+{}）".format(str(nowt),res['confirmedCount'],res['confirmedIncr'],res['suspectedCount'],res['suspectedIncr'],res['seriousCount'],res['seriousIncr'],res['deadCount'],res['deadIncr'],res['curedCount'],res['curedIncr'])
             return ret
         except (TypeError, KeyError, IndexError):
+            print(traceback.format_exc())
             return ret
         
     api_area = "https://lab.isaaclin.cn/nCoV/api/area?latest=1"
-    resp = requests.get(api_area.format(keyword))
+    resp = requests.get(api_area)
     payload = json.loads(resp.text)
     if not isinstance(payload, dict) or \
             len(payload['results']) == 0:
@@ -54,17 +56,19 @@ async def get_nCov_data(keyword: str) -> Optional[int]:
                   countryName = prov['country'] + prov['provinceName']
               ret = "新型冠状病毒（SARS-CoV-2）数据汇总(丁香园)：\n{} 截至 {} \n累计确诊：{}\n疑似：{}\n重症：{}\n死亡：{}\n治愈：{}".format(countryName,str(nowt),res['confirmedCount'],res['suspectedCount'],res['seriousCount'],res['deadCount'],res['curedCount'])
               return ret 
-          if 'cities' in prov:
+          #print(prov['cities'])
+          if prov['cities']:
             for city in prov['cities']:
               if keyword in city['cityName']:
                   res = city
                   countryName = prov['country'] + prov['provinceName'] + res['cityName']
-                  ret = "新型冠状病毒（SARS-CoV-2）数据汇总(丁香园)：\n{} 截至 {} \n累计确诊：{}\n疑似：{}\n重症：{}\n死亡：{}\n治愈：{}".format(countryName,str(nowt),res['confirmedCount'],res['suspectedCount'],res['seriousCount'],res['deadCount'],res['curedCount'])
+                  ret = "新型冠状病毒（SARS-CoV-2）数据汇总(丁香园)：\n{} 截至 {} \n累计确诊：{}\n疑似：{}\n死亡：{}\n治愈：{}".format(countryName,str(nowt),res['confirmedCount'],res['suspectedCount'],res['deadCount'],res['curedCount'])
                   return ret
 
 
           
     except (TypeError, KeyError, IndexError):
+        print(traceback.format_exc())
         return ret
 
 
@@ -82,7 +86,7 @@ async def nCov(session: CommandSession):
 
 # weather.args_parser 装饰器将函数声明为 weather 命令的参数解析器
 # 命令解析器用于将用户输入的参数解析成命令真正需要的数据
-@weather.args_parser
+@nCov.args_parser
 async def _(session: CommandSession):
     # 去掉消息首尾的空白符
     stripped_arg = session.current_arg_text.strip()
