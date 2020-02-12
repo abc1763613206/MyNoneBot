@@ -30,8 +30,8 @@ async def get_nCov_data(keyword: str) -> Optional[int]:
         resp = requests.get(api_overall)
         payload = json.loads(resp.text)
         try:
-            nowt = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(int(payload['results']['updateTime'])/1000))
-            res = payload['results']
+            nowt = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(int(payload['results'][0]['updateTime'])/1000))
+            res = payload['results'][0]
             ret = "新型冠状病毒（SARS-CoV-2）数据汇总(丁香园)：\n截至 {} \n累计确诊：{}（较昨日+{}）\n疑似：{}（较昨日+{}）\n重症：{}（较昨日+{}）\n死亡：{}（较昨日+{}）\n治愈：{}（较昨日+{}）".format(str(nowt),res['confirmedCount'],res['confirmedIncr'],res['suspectedCount'],res['suspectedIncr'],res['seriousCount'],res['seriousIncr'],res['deadCount'],res['deadIncr'],res['curedCount'],res['curedIncr'])
             return ret
         except (TypeError, KeyError, IndexError):
@@ -54,7 +54,7 @@ async def get_nCov_data(keyword: str) -> Optional[int]:
                   countryName = prov['provinceName']
               else:
                   countryName = prov['country'] + prov['provinceName']
-              ret = "新型冠状病毒（SARS-CoV-2）数据汇总(丁香园)：\n{} 截至 {} \n累计确诊：{}\n疑似：{}\n重症：{}\n死亡：{}\n治愈：{}".format(countryName,str(nowt),res['confirmedCount'],res['suspectedCount'],res['seriousCount'],res['deadCount'],res['curedCount'])
+              ret = "新型冠状病毒（SARS-CoV-2）数据汇总(丁香园)：\n{} 截至 {} \n累计确诊：{}\n疑似：{}\n死亡：{}\n治愈：{}".format(countryName,str(nowt),res['confirmedCount'],res['suspectedCount'],res['deadCount'],res['curedCount'])
               return ret 
           #print(prov['cities'])
           if prov['cities']:
@@ -74,7 +74,7 @@ async def get_nCov_data(keyword: str) -> Optional[int]:
 
 # on_command 装饰器将函数声明为一个命令处理器
 # 这里 nCov 为命令的名字，同时允许使用别名「天气」「天气预报」「查天气」
-@on_command('nCov', aliases=('疫情', '疫情查询', 'nCov'))
+@on_command('nCov', aliases=('疫情', '疫情查询', 'nCov'), only_to_me=False)
 async def nCov(session: CommandSession):
     # 从会话状态（session.state）中获取城市名称（city），如果当前不存在，则询问用户
     city = session.get('city', prompt='你想查询哪里的疫情呢？')
@@ -102,10 +102,12 @@ async def _(session: CommandSession):
     if not stripped_arg:
         # 用户没有发送有效的城市名称（而是发送了空白字符），则提示重新输入
         # 这里 session.pause() 将会发送消息并暂停当前会话（该行后面的代码不会被运行）
-        session.pause('要查询的名称不能为空呢，请重新输入（想要查询汇总信息请发送“疫情 全部”）')
+        #session.pause('要查询的名称不能为空呢，请重新输入（想要查询汇总信息请发送“疫情 全部”）')
+        session.state['city'] = ''
+        return
 
     # 如果当前正在向用户询问更多信息（例如本例中的要查询的城市），且用户输入有效，则放入会话状态
-    session.state[session.current_key] = stripped_arg
+    #session.state[session.current_key] = stripped_arg
 
 # on_natural_language 装饰器将函数声明为一个自然语言处理器
 # keywords 表示需要响应的关键词，类型为任意可迭代对象，元素类型为 str
