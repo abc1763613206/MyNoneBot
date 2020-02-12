@@ -30,6 +30,5 @@ async def _(session: RequestSession):
         # 验证信息错误，拒绝入群
         # await session.reject('非超级用户，不能进行邀请操作')
             await bot.send_private_msg(user_id=session.ctx['user_id'], message='抱歉，您不是超级用户，不能进行邀请操作！')
-
     else:
     	return
