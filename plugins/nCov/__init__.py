@@ -88,10 +88,9 @@ async def get_nCov_data(keyword: str) -> str:
 # on_command 装饰器将函数声明为一个命令处理器
 @on_command('nCov', aliases=('疫情', '疫情查询', 'nCov'), only_to_me=False)
 async def nCov(session: CommandSession):
-    # 从会话状态（session.state）中获取城市名称（city），如果当前不存在，则询问用户
+    # 从会话状态（session.state）中获取名称（city），如果当前不存在，则询问用户
     cityt = session.get('city', prompt='你想查询哪里的疫情呢？（查看汇总请回复 全部）')
-    cityt = cityt.decode("utf8")
-    city = re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*（）]+".decode("utf8"), "".decode("utf8"),cityt)
+    city = re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*（）]+", "",cityt)
     await session.send('正在查询 {} 的疫情'.format(str(city)))
     report = await get_nCov_data(city)
     # 向用户发送天气预报
