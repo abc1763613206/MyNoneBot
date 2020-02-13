@@ -26,7 +26,6 @@ DAILY_STORY_URL_FORMAT = 'https://daily.zhihu.com/story/{}'
 
 @cached(ttl=5 * 60) # 5 min
 async def get_zhihu_daily() -> str:
-    keyword = keyword.strip()
     ret = "API 请求失败，若持续出现该问题，请联系机器人作者！"
     resp = requests.get(DAILY_LATEST_API_URL, headers={
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
