@@ -31,7 +31,7 @@ async def get_nCov_data(keyword: str) -> str:
     resp = requests.get(api_overall)
     if not resp.status_code == 200:
         ret = "[{}]抱歉，Server 端到 API 的请求出错！\n错误详情：\n{}".format(str(resp.status_code),str(resp.text))
-        return
+        return ret
     if not keyword or keyword == '全部':
         payload = json.loads(resp.text)
         try:
