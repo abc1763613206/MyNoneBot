@@ -77,6 +77,8 @@ async def get_nCov_data(keyword: str) -> str:
                   ret = "新型冠状病毒（SARS-CoV-2）数据汇总(丁香园)：\n{} 截至 {} \n累计确诊：{}\n疑似：{}\n死亡：{}\n治愈：{}".format(countryName,str(nowt),res['confirmedCount'],res['suspectedCount'],res['deadCount'],res['curedCount'])
                   print('get')
                   return ret
+        ret = "{} 暂时没有疫情。\n\n请检查您的输入是否出现偏差！".format(city)
+        return ret
 
 
           
