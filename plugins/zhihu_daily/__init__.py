@@ -42,7 +42,8 @@ async def get_zhihu_daily() -> str:
         stories = payload['stories']
         ret = "知乎日报 {}：\n\n".format(str(payload['date']))
         for story in stories:
-          ret +="{}\n{}\n{}\n\n".format(str(story['title']).replace('\\',''),str(story['hint']).replace('\\',''),str(story['url']).replace('\\',''))
+          #ret +="{}\n{}\n{}\n\n".format(str(story['title']).replace('\\',''),str(story['hint']).replace('\\',''),str(story['url']).replace('\\',''))
+          ret +="{}\n{}\n{}\n\n".format(str(story['title']),str(story['hint']),str(story['url']))
         return ret
     except (TypeError, KeyError, IndexError):
         print(traceback.format_exc())
@@ -50,10 +51,12 @@ async def get_zhihu_daily() -> str:
 
 
 
-@on_command('zhihu_daily', aliases=('知乎日报'), only_to_me=False)
+@on_command('zhihu_daily', aliases=('知乎日报'))
 async def zhihu_daily(session: CommandSession):
     ret = await get_zhihu_daily()
     session.finish(ret)
 
 
-
+@on_natural_language(keywords={'知乎日报'}, only_to_me=False)
+async def _(session: NLPSession):
+    return IntentCommand(80.0, 'zhihu_daily')
