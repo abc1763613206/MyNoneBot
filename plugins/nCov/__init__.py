@@ -91,6 +91,7 @@ async def nCov(session: CommandSession):
     # 从会话状态（session.state）中获取城市名称（city），如果当前不存在，则询问用户
     city = session.get('city', prompt='你想查询哪里的疫情呢？（查看汇总请回复 全部）')
     # 获取城市的天气预报
+    await session.send('正在查询 {} 的疫情'.format(str(city)))
     report = await get_nCov_data(city)
     # 向用户发送天气预报
     await session.send(report)
