@@ -22,9 +22,10 @@ __plugin_usage__ = r"""
 
 
 @cached(ttl=5 * 60) # 5 min
-async def get_nCov_data(keyword: str) -> Optional[int]:
+async def get_nCov_data(keyword: str) -> str:
     keyword = keyword.strip()
     ret = "API 请求失败，请检查您的输入是否规范！"
+    print('searching  ' + keyword)
     if not keyword or keyword == '全部':
         api_overall = "https://lab.isaaclin.cn/nCoV/api/overall"
         resp = requests.get(api_overall)
@@ -33,6 +34,7 @@ async def get_nCov_data(keyword: str) -> Optional[int]:
             nowt = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(int(payload['results'][0]['updateTime'])/1000))
             res = payload['results'][0]
             ret = "新型冠状病毒（SARS-CoV-2）数据汇总(丁香园)：\n截至 {} \n累计确诊：{}（较昨日+{}）\n疑似：{}（较昨日+{}）\n重症：{}（较昨日+{}）\n死亡：{}（较昨日+{}）\n治愈：{}（较昨日+{}）".format(str(nowt),res['confirmedCount'],res['confirmedIncr'],res['suspectedCount'],res['suspectedIncr'],res['seriousCount'],res['seriousIncr'],res['deadCount'],res['deadIncr'],res['curedCount'],res['curedIncr'])
+            print('get')
             return ret
         except (TypeError, KeyError, IndexError):
             print(traceback.format_exc())
@@ -55,6 +57,7 @@ async def get_nCov_data(keyword: str) -> Optional[int]:
               else:
                   countryName = prov['country'] + prov['provinceName']
               ret = "新型冠状病毒（SARS-CoV-2）数据汇总(丁香园)：\n{} 截至 {} \n累计确诊：{}\n疑似：{}\n死亡：{}\n治愈：{}".format(countryName,str(nowt),res['confirmedCount'],res['suspectedCount'],res['deadCount'],res['curedCount'])
+              print('get')
               return ret 
           #print(prov['cities'])
           if prov['cities']:
@@ -63,6 +66,7 @@ async def get_nCov_data(keyword: str) -> Optional[int]:
                   res = city
                   countryName = prov['country'] + prov['provinceName'] + res['cityName']
                   ret = "新型冠状病毒（SARS-CoV-2）数据汇总(丁香园)：\n{} 截至 {} \n累计确诊：{}\n疑似：{}\n死亡：{}\n治愈：{}".format(countryName,str(nowt),res['confirmedCount'],res['suspectedCount'],res['deadCount'],res['curedCount'])
+                  print('get')
                   return ret
 
 
@@ -103,7 +107,7 @@ async def _(session: CommandSession):
         # 用户没有发送有效的城市名称（而是发送了空白字符），则提示重新输入
         # 这里 session.pause() 将会发送消息并暂停当前会话（该行后面的代码不会被运行）
         #session.pause('要查询的名称不能为空呢，请重新输入（想要查询汇总信息请发送“疫情 全部”）')
-        session.state['city'] = ''
+        session.state['city'] = '全部'
         return
 
     # 如果当前正在向用户询问更多信息（例如本例中的要查询的城市），且用户输入有效，则放入会话状态
