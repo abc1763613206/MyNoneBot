@@ -13,6 +13,8 @@ import json
 import requests
 import traceback
 
+from jieba import posseg
+
 __plugin_name__ = '新型冠状病毒（SARS-CoV-2）数据'
 __plugin_usage__ = r"""
 新型冠状病毒（SARS-CoV-2）数据(丁香园)
