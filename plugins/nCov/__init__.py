@@ -39,7 +39,10 @@ async def get_nCov_data(keyword: str) -> str:
         try:
             nowt = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(int(payload['results'][0]['updateTime'])/1000))
             res = payload['results'][0]
-            ret = "新型冠状病毒（SARS-CoV-2）数据汇总(丁香园)：\n截至 {} \n累计确诊：{}（较昨日+{}）\n疑似：{}（较昨日+{}）\n重症：{}（较昨日+{}）\n死亡：{}（较昨日+{}）\n治愈：{}（较昨日+{}）".format(str(nowt),res['confirmedCount'],res['confirmedIncr'],res['suspectedCount'],res['suspectedIncr'],res['seriousCount'],res['seriousIncr'],res['deadCount'],res['deadIncr'],res['curedCount'],res['curedIncr'])
+            if 'confirmedIncr' in res:
+                ret = "新型冠状病毒（SARS-CoV-2）数据汇总(丁香园)：\n世界 截至 {} \n累计确诊：{}（较昨日+{}）\n疑似：{}（较昨日+{}）\n重症：{}（较昨日+{}）\n死亡：{}（较昨日+{}）\n治愈：{}（较昨日+{}）".format(str(nowt),res['confirmedCount'],res['confirmedIncr'],res['suspectedCount'],res['suspectedIncr'],res['seriousCount'],res['seriousIncr'],res['deadCount'],res['deadIncr'],res['curedCount'],res['curedIncr'])
+            else:
+                ret = "新型冠状病毒（SARS-CoV-2）数据汇总(丁香园)：\n世界 截至 {} \n累计确诊：{}\n疑似：{}\n重症：{}\n死亡：{}\n治愈：{}".format(str(nowt),res['confirmedCount'],res['suspectedCount'],res['seriousCount'],res['deadCount'],res['curedCount'])
             print('get')
             return ret
         except (TypeError, KeyError, IndexError):
