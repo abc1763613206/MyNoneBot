@@ -51,7 +51,7 @@ async def get_zhihu_daily() -> str:
 
 
 @on_command('zhihu_daily', aliases=('知乎日报'), only_to_me=False)
-async def nCov(session: CommandSession):
+async def zhihu_daily(session: CommandSession):
     ret = await get_zhihu_daily()
     session.finish(ret)
 
