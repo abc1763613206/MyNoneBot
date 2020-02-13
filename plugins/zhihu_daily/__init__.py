@@ -42,7 +42,7 @@ async def get_zhihu_daily() -> str:
         stories = payload['stories']
         ret = "知乎日报 {}：\n\n".format(str(payload['date']))
         for story in stories:
-          ret +="{}\n{}\n{}\n\n".format(str(story['title']).replace('\\',''),str(story['hint']).replace('\\',''),str(story['']).replace('\\','url'))
+          ret +="{}\n{}\n{}\n\n".format(str(story['title']).replace('\\',''),str(story['hint']).replace('\\',''),str(story['url']).replace('\\',''))
         return ret
     except (TypeError, KeyError, IndexError):
         print(traceback.format_exc())
