@@ -24,12 +24,16 @@ __plugin_usage__ = r"""
 @cached(ttl=5 * 60) # 5 min
 async def get_nCov_data(keyword: str) -> str:
     keyword = keyword.strip()
-    ret = "API 请求失败，请检查您的输入是否规范！"
-    print('searching  ' + keyword)
+    ret = "API 请求失败，请检查您的输入是否规范，或是联系机器人作者！"
+    print('Searching  ' + keyword)
+    # 源站居然经常报502，再多层检测
+    api_overall = "https://lab.isaaclin.cn/nCoV/api/overall"
+    resp = await requests.get(api_overall)
+    if not resp.status_code == 200:
+        ret = "[{}]抱歉，Server 端到 API 的请求出错！\n错误详情：\n{}".format(str(resp.status_code),str(resp.text))
+        return
     if not keyword or keyword == '全部':
-        api_overall = "https://lab.isaaclin.cn/nCoV/api/overall"
-        resp = requests.get(api_overall)
-        payload = json.loads(resp.text)
+        payload = await json.loads(resp.text)
         try:
             nowt = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(int(payload['results'][0]['updateTime'])/1000))
             res = payload['results'][0]
@@ -41,8 +45,8 @@ async def get_nCov_data(keyword: str) -> str:
             return ret
         
     api_area = "https://lab.isaaclin.cn/nCoV/api/area?latest=1"
-    resp = requests.get(api_area)
-    payload = json.loads(resp.text)
+    resp = await requests.get(api_area)
+    payload = await json.loads(resp.text)
     if not isinstance(payload, dict) or \
             len(payload['results']) == 0:
         return ret
