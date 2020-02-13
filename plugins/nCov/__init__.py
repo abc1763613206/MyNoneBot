@@ -1,7 +1,7 @@
 import asyncio
 import re
 import time
-from typing import Optional
+from typing import Optional, List, Dict, Any
 
 from aiocache import cached
 from nonebot import MessageSegment
@@ -83,7 +83,6 @@ async def get_nCov_data(keyword: str) -> str:
 
 
 # on_command 装饰器将函数声明为一个命令处理器
-# 这里 nCov 为命令的名字，同时允许使用别名「天气」「天气预报」「查天气」
 @on_command('nCov', aliases=('疫情', '疫情查询', 'nCov'), only_to_me=False)
 async def nCov(session: CommandSession):
     # 从会话状态（session.state）中获取城市名称（city），如果当前不存在，则询问用户
@@ -94,7 +93,7 @@ async def nCov(session: CommandSession):
     await session.send(report)
 
 
-# weather.args_parser 装饰器将函数声明为 weather 命令的参数解析器
+
 # 命令解析器用于将用户输入的参数解析成命令真正需要的数据
 @nCov.args_parser
 async def _(session: CommandSession):
